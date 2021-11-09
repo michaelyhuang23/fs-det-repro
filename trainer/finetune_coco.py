@@ -44,9 +44,6 @@ def main():
     dataset = get_fewshot_coco("../coco", "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
     dataset_test, num_classes = get_dataset("coco", "minival", get_transform(train=False), "../coco")
 
-    print(dataset[0])
-    return
-
     print("Creating data loaders")
     train_sampler = torch.utils.data.RandomSampler(dataset)
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
@@ -74,10 +71,10 @@ def main():
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.SGD(
-        params, lr=0.02/8, momentum=0.9, weight_decay=1e-4)
+        params, lr=0.02/8/20, momentum=0.9, weight_decay=1e-4)
 
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
-    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[16, 22], gamma=0.1)
+    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5, 10], gamma=0.1)
 
     resume = ''
 
@@ -97,7 +94,7 @@ def main():
             'lr_scheduler': lr_scheduler.state_dict(),
             },
             os.path.join('checkpoints', 'model_baseclass_{}.pth'.format(1)))
-    epochs = 26
+    epochs = 15
     train_print_freq = 1000
 
     for epoch in range(epochs):

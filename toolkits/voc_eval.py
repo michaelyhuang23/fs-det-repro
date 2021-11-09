@@ -2,6 +2,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import sys
+sys.path.append('../')
 import xml.etree.ElementTree as ET
 import os
 import shutil

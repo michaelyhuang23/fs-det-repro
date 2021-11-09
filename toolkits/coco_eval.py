@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import json
 import tempfile
 
@@ -13,7 +15,7 @@ import pycocotools.mask as mask_util
 
 from collections import defaultdict
 
-import utils
+from toolkits import utils
 
 
 class CocoEvaluator(object):

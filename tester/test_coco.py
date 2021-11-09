@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import datetime
 import os
 import time
@@ -9,14 +11,14 @@ import torchvision
 import torchvision.models.detection
 import torchvision.models.detection.mask_rcnn
 
-from coco_utils import get_coco, get_coco_kp
-from voc_utils import get_voc
+from toolkits.coco_utils import get_coco, get_coco_kp
+from toolkits.voc_utils import get_voc
 
-from group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
-from engine import train_one_epoch, voc_evaluate, coco_evaluate
+from toolkits.group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
+from toolkits.engine import train_one_epoch, voc_evaluate, coco_evaluate
 
-import utils
-import transforms as T
+from toolkits import utils
+import toolkits.transforms as T
 
 
 def get_dataset(name, image_set, transform, data_path):
@@ -37,8 +39,9 @@ def main():
     # Use  CUDA_AVAILABLE_DEVICES=0 to control which device to use
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     print(f'using device {device}')
-    device_id = torch.cuda.current_device()
-    print(f'using gpu {torch.cuda.get_device_name(device_id)}')
+    if device == 'cuda':
+        device_id = torch.cuda.current_device()
+        print(f'using gpu {torch.cuda.get_device_name(device_id)}')
     # Data loading code
     print("Loading data")
 

@@ -1,7 +1,9 @@
+import sys
+sys.path.append('../')
 import torch
 import torchvision
 
-import transforms as T
+import toolkits.transforms as T
 
 class ConvertVOCtoCOCO(object):
     CLASSES = (

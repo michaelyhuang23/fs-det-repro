@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../')
 import torch
 import torch.utils.data
 from torch import nn
@@ -5,12 +7,12 @@ import torchvision
 import torchvision.models.detection
 import torchvision.models.detection.mask_rcnn
 
-from voc_utils import get_voc
+from toolkits.voc_utils import get_voc
 
-from engine import voc_evaluate
+from toolkits.engine import voc_evaluate
 
-import utils
-import transforms as T
+from toolkits import utils
+import toolkits.transforms as T
 
 
 def get_dataset(name, image_set, transform, data_path):

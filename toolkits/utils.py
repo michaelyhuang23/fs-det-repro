@@ -1,5 +1,6 @@
 from __future__ import print_function
-
+import sys
+sys.path.append('../')
 from collections import defaultdict, deque
 import datetime
 import pickle

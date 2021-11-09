@@ -6,6 +6,8 @@ To run in a multi-gpu environment, use the distributed launcher::
         train.py ... --world-size $NGPU
 
 """
+import sys
+sys.path.append('../')
 import datetime
 import os
 import time
@@ -17,14 +19,14 @@ import torchvision
 import torchvision.models.detection
 import torchvision.models.detection.mask_rcnn
 
-from coco_utils import get_coco, get_coco_kp
-from voc_utils import get_voc
+from toolkits.coco_utils import get_coco, get_coco_kp
+from toolkits.voc_utils import get_voc
 
-from group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
-from engine import train_one_epoch, voc_evaluate, coco_evaluate
+from toolkits.group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
+from toolkits.engine import train_one_epoch, voc_evaluate, coco_evaluate
 
-import utils
-import transforms as T
+from toolkits import utils
+import toolkits.transforms as T
 
 
 def get_dataset(name, image_set, transform, data_path):

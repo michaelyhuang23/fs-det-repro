@@ -76,10 +76,10 @@ def main():
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5, 10], gamma=0.1)
 
-    resume = ''
+    pretrain = 'checkpoints/model_baseclass_22.pth'
 
-    if resume:
-        checkpoint = torch.load(resume, map_location='cpu')
+    if pretrain != '':
+        checkpoint = torch.load(pretrain, map_location='cpu')
         model_without_ddp.load_state_dict(checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
         lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
@@ -93,7 +93,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_baseclass_{}.pth'.format(1)))
+            os.path.join('checkpoints', 'model_finetune_{}.pth'.format(1)))
     epochs = 15
     train_print_freq = 1000
 
@@ -105,7 +105,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_baseclass_{}.pth'.format(epoch)))
+            os.path.join('checkpoints', 'model_finetune_{}.pth'.format(epoch)))
 
         # evaluate after every epoch
         coco_evaluate(model, data_loader_test, device=device)

@@ -226,7 +226,6 @@ def get_coco(root, image_set, transforms, mode='instances'):
         "val": ("val2017", os.path.join("annotations", anno_file_template.format(mode, "val"))),
         "minival": ("val2014", os.path.join("annotations", '5k.json')),
         "largetrain": ("trainval2014", os.path.join("annotations", 'trainvalno5k.json')),
-        # "train": ("val2017", os.path.join("annotations", anno_file_template.format(mode, "val")))
     }
 
     t = [ConvertCocoPolysToMask()]
@@ -243,9 +242,26 @@ def get_coco(root, image_set, transforms, mode='instances'):
 
     if image_set == "train":
         dataset = _coco_remove_images_without_annotations(dataset)
+    return dataset
 
-    # dataset = torch.utils.data.Subset(dataset, [i for i in range(500)])
+def get_fewshot_coco(root, image_set, transforms, seed=0, shot=30, mode = "train"):
+    ann_file = os.path.join("fewshot_anno",f"seed{seed}_{shot}shot_all.json")
 
+    t = [ConvertCocoPolysToMask()]
+
+    if transforms is not None:
+        t.append(transforms)
+    transforms = T.Compose(t)
+
+    img_folder = "trainval2014"
+    img_folder = os.path.join(root, img_folder)
+    ann_file = os.path.join(root, ann_file)
+
+    print(img_folder, ann_file)
+    dataset = CocoDetection(img_folder, ann_file, transforms=transforms)
+
+    if mode == "train":
+        dataset = _coco_remove_images_without_annotations(dataset)
     return dataset
 
 

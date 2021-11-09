@@ -11,7 +11,7 @@ import torchvision
 import torchvision.models.detection
 import torchvision.models.detection.mask_rcnn
 
-from toolkits.coco_utils import get_coco, get_coco_kp
+from toolkits.coco_utils import get_coco, get_coco_kp, get_fewshot_coco
 from toolkits.voc_utils import get_voc
 
 from toolkits.group_by_aspect_ratio import GroupedBatchSampler, create_aspect_ratio_groups
@@ -20,12 +20,10 @@ from toolkits.engine import train_one_epoch, voc_evaluate, coco_evaluate
 from toolkits import utils
 import toolkits.transforms as T
 
-
 def get_dataset(name, image_set, transform, data_path):
     p, ds_fn, num_classes = data_path, get_coco, 91
     ds = ds_fn(p, image_set=image_set, transforms=transform)
     return ds, num_classes
-
 
 def get_transform(train):
     transforms = []
@@ -43,8 +41,11 @@ def main():
     # Data loading code
     print("Loading data")
 
-    dataset, num_classes = get_dataset("coco", "largetrain", get_transform(train=True), "coco")
-    dataset_test, _ = get_dataset("coco", "minival", get_transform(train=False), "coco")
+    dataset = get_fewshot_coco("../coco", "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
+    dataset_test, num_classes = get_dataset("coco", "minival", get_transform(train=False), "../coco")
+
+    print(dataset)
+    return
 
     print("Creating data loaders")
     train_sampler = torch.utils.data.RandomSampler(dataset)

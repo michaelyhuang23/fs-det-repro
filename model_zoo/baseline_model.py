@@ -61,15 +61,16 @@ class FewshotBaseline(nn.Module):
     def save(self, file_name="FewshotBaseline.pkl"):
         torch.save(self.fasterRCNN.state_dict(), file_name)
 
-    def load(self, file_name="FewshotBaseline.pkl"):
-        self.fasterRCNN.load_state_dict(torch.load(file_name))
+    def load(self, load_obj="FewshotBaseline.pkl"):
+        if isinstance(load_obj, str):
+            self.fasterRCNN.load_state_dict(torch.load(load_obj))
+        else:
+            self.fasterRCNN.load_state_dict(load_obj)
 
     def __call__(self,imgs,labels=None,classes=None):
         # we only train classes in range [start_cls, end_cls]
         return self.fasterRCNN(imgs, labels)
 
-
-model = FewshotBaseline()
 
 
 

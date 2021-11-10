@@ -20,6 +20,8 @@ from toolkits.engine import train_one_epoch, voc_evaluate, coco_evaluate
 from toolkits import utils
 import toolkits.transforms as T
 
+from model_zoo.baseline_model import FewshotBaseline
+
 def get_dataset(name, image_set, transform, data_path):
     p, ds_fn, num_classes = data_path, get_coco, 91
     ds = ds_fn(p, image_set=image_set, transforms=transform)
@@ -34,6 +36,7 @@ def get_transform(train):
 
 
 def main():
+    novel_cls = [1, 17, 16, 21, 18, 19, 20, 2, 9, 6, 3, 4, 7, 44, 62, 67, 64, 63, 72]
     # Use  CUDA_AVAILABLE_DEVICES=0 to control which device to use
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
@@ -63,8 +66,16 @@ def main():
         collate_fn=utils.collate_fn)
 
     print("Creating model")
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=num_classes,
-                                                              pretrained=False)
+    model = FewshotBaseline()
+
+    pretrain = 'checkpoints/model_baseclass_22.pth'
+
+    if pretrain != '':
+        checkpoint = torch.load(pretrain, map_location='cpu')
+        model.load(checkpoint['model'])
+
+    model.init_class(novel_cls)
+
     model.to(device)
 
     model_without_ddp = model
@@ -75,14 +86,6 @@ def main():
 
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5, 10], gamma=0.1)
-
-    pretrain = 'checkpoints/model_baseclass_22.pth'
-
-    if pretrain != '':
-        checkpoint = torch.load(pretrain, map_location='cpu')
-        model_without_ddp.load_state_dict(checkpoint['model'])
-        optimizer.load_state_dict(checkpoint['optimizer'])
-        lr_scheduler.load_state_dict(checkpoint['lr_scheduler'])
 
     print("Start training")
     start_time = time.time()

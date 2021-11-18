@@ -19,7 +19,7 @@ class Predictor(nn.Module):
         self.bbox_pred = faster_predictor.bbox_pred
 
     def init_func(data, bias = None):
-        stdv = 1. / math.sqrt(data.size(1)) # first dim is output dim
+        stdv = 1. / math.sqrt(data.shape[0]) # first dim is output dim
         data.uniform_(-stdv, stdv)
         if bias is not None:
             bias.uniform_(-stdv, stdv)

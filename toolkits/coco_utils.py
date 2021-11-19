@@ -226,6 +226,8 @@ def get_coco(root, image_set, transforms, mode='instances'):
         "val": ("val2017", os.path.join("annotations", anno_file_template.format(mode, "val"))),
         "minival": ("val2014", os.path.join("annotations", '5k.json')),
         "largetrain": ("trainval2014", os.path.join("annotations", 'trainvalno5k.json')),
+        "minival_novel": ("val2014", os.path.join("annotations", '5k_novel.json')),
+        "largetrain_novel": ("trainval2014", os.path.join("annotations", 'trainvalno5k_novel.json'))
     }
 
     t = [ConvertCocoPolysToMask()]

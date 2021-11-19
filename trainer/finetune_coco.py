@@ -45,7 +45,7 @@ def main():
     print("Loading data")
 
     dataset = get_fewshot_coco("..\\coco", "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
-    dataset_test, num_classes = get_dataset("coco", "minival", get_transform(train=False), "..\\coco")
+    dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), "..\\coco")
 
     print("Creating data loaders")
     train_sampler = torch.utils.data.RandomSampler(dataset)

@@ -2,7 +2,7 @@ import json
 import os
 from typing import Dict
 
-directory = 'seed9'
+directory = 'seed0'
 
 def merge_in(parent : Dict, child : Dict):
 	if 'images' not in parent:

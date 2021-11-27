@@ -1,4 +1,6 @@
 checkpoints_coco/
+checkpoints/
+coco/
 **/.DS_Store
 .DS_Store
 coco/annotations/

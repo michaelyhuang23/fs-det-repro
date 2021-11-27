@@ -44,13 +44,13 @@ def main():
     # Data loading code
     print("Loading data")
 
-    dataset = get_fewshot_coco("../coco", "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
-    dataset_test, num_classes = get_dataset("coco", "minival", get_transform(train=False), "../coco")
+    dataset = get_fewshot_coco("..\\coco", "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
+    dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), "..\\coco")
 
     print("Creating data loaders")
     train_sampler = torch.utils.data.RandomSampler(dataset)
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
-
+    
     batch_size = 2
 
     train_batch_sampler = torch.utils.data.BatchSampler(
@@ -65,10 +65,11 @@ def main():
         sampler=test_sampler, num_workers=8,
         collate_fn=utils.collate_fn)
 
+    print(next(iter(data_loader_test)))
     print("Creating model")
     model = FewshotBaseline()
 
-    pretrain = 'checkpoints/model_baseclass_22.pth'
+    pretrain = os.path.join('..','checkpoints','model_baseclass_22.pth')
 
     if pretrain != '':
         checkpoint = torch.load(pretrain, map_location='cpu')
@@ -82,8 +83,8 @@ def main():
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.SGD(
-        params, lr=0.02/8/20, momentum=0.9, weight_decay=1e-4)
-
+        params, lr=0.02/8, momentum=0.9, weight_decay=1e-4)
+    # 0.02 / 20 / 8
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5, 10], gamma=0.1)
 
@@ -96,9 +97,9 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_finetune_{}.pth'.format(1)))
+            os.path.join('..','checkpoints', 'model_finetune_{}.pth'.format(-1)))
     epochs = 15
-    train_print_freq = 1000
+    train_print_freq = 100
 
     for epoch in range(epochs):
         train_one_epoch(model, optimizer, data_loader, device, epoch, train_print_freq)
@@ -108,7 +109,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_finetune_{}.pth'.format(epoch)))
+            os.path.join('..','checkpoints', 'model_finetune_{}.pth'.format(epoch)))
 
         # evaluate after every epoch
         coco_evaluate(model, data_loader_test, device=device)

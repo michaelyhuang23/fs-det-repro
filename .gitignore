@@ -1,3 +1,11 @@
 checkpoints_coco/
 **/.DS_Store
 .DS_Store
+coco/annotations/
+coco/train2017/
+coco/train2014/
+coco/val2017/
+coco/val2014/
+coco/trainval2014/
+checkpoints/
+checkpoints_voc/

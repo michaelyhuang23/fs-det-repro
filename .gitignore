@@ -1,9 +1,8 @@
 checkpoints_coco/
 checkpoints/
-coco/
 **/.DS_Store
 .DS_Store
-coco/annotations/
+coco/annotations/*.json
 coco/train2017/
 coco/train2014/
 coco/val2017/

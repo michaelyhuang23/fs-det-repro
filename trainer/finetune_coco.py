@@ -36,7 +36,7 @@ def get_transform(train):
 
 
 def main():
-    novel_cls = [1, 17, 16, 21, 18, 19, 20, 2, 9, 6, 3, 4, 7, 44, 62, 67, 64, 63, 72]
+    novel_cls = [1, 2, 3, 4, 5, 6, 7, 9, 16, 17, 18, 19, 20, 21, 44, 62, 63, 64, 67, 72]
     # Use  CUDA_AVAILABLE_DEVICES=0 to control which device to use
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 

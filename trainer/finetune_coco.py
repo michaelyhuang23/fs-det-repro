@@ -68,9 +68,10 @@ def main():
     print("Creating model")
     model = FewshotBaseline()
 
-    pretrain = os.path.join('..','checkpoints','model_baseclass_22.pth')
+    pretrain = os.path.join('..','checkpoints_coco','model_baseclass_22.pth')
 
     if pretrain != '':
+        print(f'loading model from {pretrain}')
         checkpoint = torch.load(pretrain, map_location='cpu')
         model.load(checkpoint['model'])
 
@@ -79,6 +80,8 @@ def main():
     model.to(device)
 
     model_without_ddp = model
+    coco_evaluate(model, data_loader_test, device=device)
+
 
     params = [p for p in model.parameters() if p.requires_grad]
     optimizer = torch.optim.SGD(

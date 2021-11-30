@@ -49,6 +49,9 @@ class FewshotBaseline(nn.Module):
         super(FewshotBaseline, self).__init__()
         self.fasterRCNN = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=False, pretrained_backbone=True)
         self.fasterRCNN.roi_heads.box_predictor = Predictor(self.fasterRCNN.roi_heads.box_predictor) 
+        self.lock_backend()
+
+    def lock_backend(self):
         for param in self.fasterRCNN.parameters():
             param.requires_grad = False
         for param in self.fasterRCNN.roi_heads.box_predictor.parameters():

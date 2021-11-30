@@ -246,8 +246,11 @@ def get_coco(root, image_set, transforms, mode='instances'):
         dataset = _coco_remove_images_without_annotations(dataset)
     return dataset
 
-def get_fewshot_coco(root, image_set, transforms, seed=0, shot=30, mode = "train"):
-    ann_file = os.path.join("fewshot_anno",f"seed{seed}_{shot}shot_all.json")
+def get_fewshot_coco(root, image_set, transforms, seed=0, shot=30, novel=False, mode = "train"):
+    if novel:
+        ann_file = os.path.join("fewshot_anno",f"seed{seed}_{shot}shot_novel.json")
+    else:
+        ann_file = os.path.join("fewshot_anno",f"seed{seed}_{shot}shot_all.json")
 
     t = [ConvertCocoPolysToMask()]
 

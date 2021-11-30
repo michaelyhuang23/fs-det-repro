@@ -43,7 +43,7 @@ def main():
     print(f'using device {device}')
     # Data loading code
     print("Loading data")
-    dataset = get_fewshot_coco(os.path.join('..','coco'), "trainval2014", get_transform(train=True), seed=0, shot=30, mode='train')
+    dataset = get_fewshot_coco(os.path.join('..','coco'), "trainval2014", get_transform(train=True), seed=0, shot=30, novel=True, mode='train')
     dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), os.path.join('..','coco'))
 
     print("Creating data loaders")

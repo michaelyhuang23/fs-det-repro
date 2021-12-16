@@ -44,8 +44,8 @@ def main():
         print(f'using gpu {torch.cuda.get_device_name(device_id)}')
     # Data loading code
     print("Loading data")
-
-    dataset_test, num_classes = get_dataset("coco", 'minival_novel', get_transform(train=False), 'coco')
+    
+    dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), os.path.join('..','coco'))
 
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
 

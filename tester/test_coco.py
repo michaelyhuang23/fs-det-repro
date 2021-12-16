@@ -57,8 +57,11 @@ def main():
     print("Creating model")
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=num_classes,
                                                               pretrained=False)
-    checkpoint = torch.load('checkpoints/model_10.pth', map_location='cpu')
+
+    pretrain = os.path.join('..','checkpoints_coco','model_finetune2_99.pth')
+    checkpoint = torch.load(pretrain, map_location='cpu')
     model.load_state_dict(checkpoint['model'])
+
     model.to(device)
 
     coco_evaluate(model, data_loader_test, device=device)

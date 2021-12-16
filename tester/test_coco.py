@@ -1,15 +1,10 @@
 import sys
 sys.path.append('../')
-import datetime
 import os
-import time
 
 import torch
 import torch.utils.data
 from torch import nn
-import torchvision
-import torchvision.models.detection
-import torchvision.models.detection.mask_rcnn
 
 from toolkits.coco_utils import get_coco, get_coco_kp
 from toolkits.voc_utils import get_voc
@@ -19,6 +14,9 @@ from toolkits.engine import train_one_epoch, voc_evaluate, coco_evaluate
 
 from toolkits import utils
 import toolkits.transforms as T
+
+from model_zoo.baseline_model import FewshotBaseline
+
 
 
 def get_dataset(name, image_set, transform, data_path):
@@ -44,7 +42,7 @@ def main():
         print(f'using gpu {torch.cuda.get_device_name(device_id)}')
     # Data loading code
     print("Loading data")
-    
+
     dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), os.path.join('..','coco'))
 
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
@@ -55,8 +53,7 @@ def main():
         collate_fn=utils.collate_fn)
 
     print("Creating model")
-    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=num_classes,
-                                                              pretrained=False)
+    model = FewshotBaseline()
 
     pretrain = os.path.join('..','checkpoints_coco','model_finetune2_99.pth')
     checkpoint = torch.load(pretrain, map_location='cpu')

@@ -64,11 +64,11 @@ def main():
         sampler=test_sampler, num_workers=8,
         collate_fn=utils.collate_fn)
 
-    print(next(iter(data_loader_test)))
+
     print("Creating model")
     model = FewshotBaseline()
 
-    pretrain = os.path.join('..','checkpoints_coco','model_finetune1_299.pth')
+    pretrain = os.path.join('..','checkpoints_coco','model_baseclass_22.pth')
 
     if pretrain != '':
         print(f'loading model from {pretrain}')
@@ -76,7 +76,7 @@ def main():
         #model.load(checkpoint['model'])
         model.load_state_dict(checkpoint['model'])
 
-    #model.init_class(novel_cls)
+    model.init_class(novel_cls)
 
     model.to(device)
 
@@ -89,7 +89,7 @@ def main():
         params, lr=0.02/8, momentum=0.9, weight_decay=1e-4)
     # 0.02 / 20 / 8
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
-    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[], gamma=0.1)
+    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5,10], gamma=0.1)
 
     print("Start training")
     start_time = time.time()
@@ -100,8 +100,8 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('..','checkpoints', 'model_finetune2_{}.pth'.format(-1)))
-    epochs = 100 
+            os.path.join('..','checkpoints', 'model_finetune1_{}.pth'.format(-1)))
+    epochs = 15 
     train_print_freq = 100
 
     for epoch in range(epochs):
@@ -112,7 +112,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('..','checkpoints', 'model_finetune2_{}.pth'.format(epoch)))
+            os.path.join('..','checkpoints', 'model_finetune1_{}.pth'.format(epoch)))
 
         # evaluate after every epoch
         coco_evaluate(model, data_loader_test, device=device)

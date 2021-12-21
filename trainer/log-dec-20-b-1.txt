@@ -1,0 +1,13 @@
+using device cuda
+Loading data
+loading annotations into memory...
+Done (t=4.19s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.15s)
+creating index...
+index created!
+Creating data loaders
+Creating model
+Start training

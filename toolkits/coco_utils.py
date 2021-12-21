@@ -224,10 +224,12 @@ def get_coco(root, image_set, transforms, mode='instances'):
     PATHS = {
         "train": ("train2017", os.path.join("annotations", anno_file_template.format(mode, "train"))),
         "val": ("val2017", os.path.join("annotations", anno_file_template.format(mode, "val"))),
-        "minival": ("val2014", os.path.join("annotations", '5k.json')),
         "largetrain": ("trainval2014", os.path.join("annotations", 'trainvalno5k.json')),
+        "largetrain_novel": ("trainval2014", os.path.join("annotations", 'trainvalno5k_novel.json')),
+        "largetrain_base": ("trainval2014", os.path.join("annotations", 'trainvalno5k_base.json')),
         "minival_novel": ("val2014", os.path.join("annotations", '5k_novel.json')),
-        "largetrain_novel": ("trainval2014", os.path.join("annotations", 'trainvalno5k_novel.json'))
+        "minival_base": ("val2014", os.path.join("annotations", '5k_base.json')),
+        "minival": ("val2014", os.path.join("annotations", '5k.json')),
     }
 
     t = [ConvertCocoPolysToMask()]

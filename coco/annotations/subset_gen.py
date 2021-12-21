@@ -11,7 +11,7 @@ base_classes = [8, 10, 11, 13, 14, 15, 22, 23, 24, 25, 27, 28, 31, 32, 33, 34, 3
 
 novel_classes = [1, 2, 3, 4, 5, 6, 7, 9, 16, 17, 18, 19, 20, 21, 44, 62, 63, 64, 67, 72]
 
-old_file = '5k'
+old_file = 'trainvalno5k'
 
 with open(f'{old_file}.json', 'r') as f:
 	old = json.load(f)

@@ -51,8 +51,8 @@ def main():
     # Data loading code
     print("Loading data")
 
-    dataset, num_classes = get_dataset("coco", "largetrain", get_transform(train=True), "coco")
-    dataset_test, _ = get_dataset("coco", "minival", get_transform(train=False), "coco")
+    dataset, num_classes = get_dataset("coco", "largetrain_base", get_transform(train=True), os.path.join("..","coco"))
+    dataset_test, _ = get_dataset("coco", "minival_base", get_transform(train=False), os.path.join("..","coco"))
 
     print("Creating data loaders")
     train_sampler = torch.utils.data.RandomSampler(dataset)
@@ -103,7 +103,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_baseclass_{}.pth'.format(1)))
+            os.path.join('..','checkpoints', 'model_baseclass_{}.pth'.format(1)))
     epochs = 26
     train_print_freq = 1000
 
@@ -115,7 +115,7 @@ def main():
             'optimizer': optimizer.state_dict(),
             'lr_scheduler': lr_scheduler.state_dict(),
             },
-            os.path.join('checkpoints', 'model_baseclass_{}.pth'.format(epoch)))
+            os.path.join('..','checkpoints', 'model_baseclass_{}.pth'.format(epoch)))
 
         # evaluate after every epoch
         coco_evaluate(model, data_loader_test, device=device)

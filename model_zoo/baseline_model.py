@@ -21,7 +21,6 @@ class Predictor(nn.Module):
     def init_func(data, bias = None):
         stdv = 1. / math.sqrt(data.shape[-1]) # last dim is input dim
         data.uniform_(-stdv, stdv)
-        print(data)
         if bias is not None:
             bias.uniform_(-stdv, stdv)
 

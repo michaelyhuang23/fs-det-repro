@@ -73,8 +73,8 @@ def main():
     if pretrain != '':
         print(f'loading model from {pretrain}')
         checkpoint = torch.load(pretrain, map_location='cpu')
-        #model.load(checkpoint['model'])
-        model.load_state_dict(checkpoint['model'])
+        model.load(checkpoint['model'])
+        #model.load_state_dict(checkpoint['model'])
 
     model.init_class(novel_cls)
 

@@ -5,6 +5,9 @@ import os
 import torch
 import torch.utils.data
 from torch import nn
+import torchvision
+import torchvision.models.detection
+import torchvision.models.detection.mask_rcnn
 
 from toolkits.coco_utils import get_coco, get_coco_kp
 from toolkits.voc_utils import get_voc
@@ -43,7 +46,7 @@ def main():
     # Data loading code
     print("Loading data")
 
-    dataset_test, num_classes = get_dataset("coco", "minival_novel", get_transform(train=False), os.path.join('..','coco'))
+    dataset_test, num_classes = get_dataset("coco", "minival_base", get_transform(train=False), os.path.join('..','coco'))
 
     test_sampler = torch.utils.data.SequentialSampler(dataset_test)
 
@@ -53,9 +56,9 @@ def main():
         collate_fn=utils.collate_fn)
 
     print("Creating model")
-    model = FewshotBaseline()
-
-    pretrain = os.path.join('..','checkpoints_coco','model_finetune2_99.pth')
+    model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=num_classes,pretrained=False)
+  
+    pretrain = os.path.join('..','checkpoints','model_baseclass_9.pth')
     checkpoint = torch.load(pretrain, map_location='cpu')
     model.load_state_dict(checkpoint['model'])
 

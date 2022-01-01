@@ -74,7 +74,7 @@ def main():
 
     print("Creating model")
     model = torchvision.models.detection.fasterrcnn_resnet50_fpn(num_classes=num_classes,
-                                                              pretrained=False)
+                                                      pretrained=False)
     model.to(device)
 
     model_without_ddp = model
@@ -86,9 +86,10 @@ def main():
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
     lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[16, 22], gamma=0.1)
 
-    resume = ''
+    resume = os.path.join('..','checkpoints','model_baseclass_9.pth')
 
     if resume:
+        print(f'resuming from {resume}')
         checkpoint = torch.load(resume, map_location='cpu')
         model_without_ddp.load_state_dict(checkpoint['model'])
         optimizer.load_state_dict(checkpoint['optimizer'])
@@ -107,7 +108,7 @@ def main():
     epochs = 26
     train_print_freq = 1000
 
-    for epoch in range(epochs):
+    for epoch in range(10,epochs):
         train_one_epoch(model, optimizer, data_loader, device, epoch, train_print_freq)
         lr_scheduler.step()
         utils.save_on_master({

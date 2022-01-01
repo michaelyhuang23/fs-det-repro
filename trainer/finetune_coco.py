@@ -89,7 +89,7 @@ def main():
         params, lr=0.02/8, momentum=0.9, weight_decay=1e-4)
     # 0.02 / 20 / 8
     # lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=args.lr_step_size, gamma=args.lr_gamma)
-    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[5,10], gamma=0.1)
+    lr_scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, milestones=[50,80], gamma=0.1)
 
     print("Start training")
     start_time = time.time()
@@ -101,7 +101,7 @@ def main():
             'lr_scheduler': lr_scheduler.state_dict(),
             },
             os.path.join('..','checkpoints', 'model_finetune1_{}.pth'.format(-1)))
-    epochs = 15 
+    epochs = 100 
     train_print_freq = 100
 
     for epoch in range(epochs):
